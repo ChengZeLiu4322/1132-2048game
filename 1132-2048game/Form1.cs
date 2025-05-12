@@ -14,6 +14,7 @@ namespace _1132_2048game
 
         public Form1()
         {
+            //初始化遊戲
             InitializeComponent();
             InitTableLayoutPanel();
             InitGrid();
@@ -23,6 +24,7 @@ namespace _1132_2048game
             AddRandomTile();
             UpdateUI();
         }
+        //動態生成TableLayoutPanel
         private void InitTableLayoutPanel()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -31,7 +33,7 @@ namespace _1132_2048game
             tableLayoutPanel1.Dock = DockStyle.Fill;
             this.Controls.Add(tableLayoutPanel1);
         }
-
+        //初始化格子
         private void InitGrid()
         {
             tableLayoutPanel1.RowCount = 4;
@@ -59,7 +61,7 @@ namespace _1132_2048game
                 }
             }
         }
-
+        //隨機添加數字(2、4)到空格中
         private void AddRandomTile()
         {
             var empty = new System.Collections.Generic.List<(int, int)>();
@@ -73,7 +75,7 @@ namespace _1132_2048game
             var (x, y) = empty[rand.Next(empty.Count)];
             board[x, y] = rand.Next(10) == 0 ? 4 : 2;
         }
-
+        //更新UI
         private void UpdateUI()
         {
             for (int i = 0; i < 4; i++)
@@ -87,7 +89,7 @@ namespace _1132_2048game
                 }
             }
         }
-
+        //上色
         private Color GetTileColor(int value)
         {
             return value switch
@@ -107,7 +109,7 @@ namespace _1132_2048game
                 _ => Color.Black
             };
         }
-
+        // 處理鍵盤按鍵輸入事件（上下左右）
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             bool moved = false;
@@ -136,7 +138,7 @@ namespace _1132_2048game
                     MessageBox.Show("遊戲結束！");
             }
         }
-
+        // 往左移動與合併邏輯
         private bool MoveLeft()
         {
             bool moved = false;
@@ -170,7 +172,7 @@ namespace _1132_2048game
             }
             return moved;
         }
-
+        // 往右：反轉 → 左移 → 反轉
         private bool MoveRight()
         {
             ReverseRows();
@@ -178,7 +180,7 @@ namespace _1132_2048game
             ReverseRows();
             return moved;
         }
-
+        // 往上：轉置 → 左移 → 轉置回來
         private bool MoveUp()
         {
             Transpose();
@@ -186,7 +188,7 @@ namespace _1132_2048game
             Transpose();
             return moved;
         }
-
+        // 往下：轉置 → 反轉 → 左移 → 反轉 → 轉置回來
         private bool MoveDown()
         {
             Transpose();
@@ -196,7 +198,7 @@ namespace _1132_2048game
             Transpose();
             return moved;
         }
-
+        // 每列反轉
         private void ReverseRows()
         {
             for (int i = 0; i < 4; i++)
@@ -207,14 +209,14 @@ namespace _1132_2048game
                 }
             }
         }
-
+        // 矩陣轉置：列變行、行變列
         private void Transpose()
         {
             for (int i = 0; i < 4; i++)
                 for (int j = i + 1; j < 4; j++)
                     (board[i, j], board[j, i]) = (board[j, i], board[i, j]);
         }
-
+        // 檢查是否已經沒有合法的移動
         private bool CheckGameOver()
         {
             for (int i = 0; i < 4; i++)
